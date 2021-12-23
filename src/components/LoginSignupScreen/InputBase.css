@@ -1,0 +1,36 @@
+.input-base-container {
+  display: flex;
+	flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 95%;
+	position: relative;
+}
+
+input {
+  width: 100%;
+  font-size: 1.35rem;
+  margin: 10px 0 20px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+input.red-bg {
+  border: 1px solid red;
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
+input:focus {
+  outline: none;
+}
+
+.eye-icon-container {
+  position: absolute;
+  top: 32px;
+  right: 20px;
+  width: 30px;
+  cursor: pointer;
+}
+
+.eye-icon-container img {
+  width: 100%;
+}

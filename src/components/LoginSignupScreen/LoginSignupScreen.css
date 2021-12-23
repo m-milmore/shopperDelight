@@ -1,0 +1,128 @@
+.login-signup-container {
+  transform: scale(0);
+  transition: all 0.5s ease-in;
+  max-width: 480px;
+  width: 480px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 0;
+  box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 150px;
+  padding-bottom: 50px;
+}
+
+.login-signup-container.open {
+  transform: scale(100%);
+}
+
+.close-button-container {
+  color: rgba(88, 88, 88, 0.75);
+  margin-left: auto;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.close-button-container:hover {
+  color: rgba(88, 88, 88, 0.25);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  padding-left: 15px;
+  overflow: hidden;
+}
+
+.error-message {
+  color: rgb(204, 44, 83);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -1px;
+  margin: 0;
+  padding-bottom: 20px;
+  text-align: left;
+  white-space: pre;
+  line-height: 1.1rem;
+  user-select: none;
+}
+
+.password-message {
+  color: black;
+  font-size: 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  margin: -20px 0 0 0;
+  padding-bottom: 15px;
+}
+
+.submit-button {
+  background-color: rgb(204, 44, 83);
+  color: white;
+  border: none;
+  width: 95%;
+  cursor: pointer;
+  padding: 10px 0;
+  margin-top: 10px;
+}
+
+.submit-button:hover {
+  background-color: rgb(244, 54, 103);
+}
+
+.submit-button:active {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.submit-button[disabled] {
+  background-color: gray;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hr-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 15px 22px 15px 17px;
+}
+
+.hr-container hr {
+  width: 100%;
+  padding: 0;
+  margin-bottom: 10px;
+}
+
+.hr-container span {
+  color: rgb(88, 88, 88);
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0 5px;
+  user-select: none;
+}
+
+.span-cancel {
+  text-decoration: underline;
+  color: rgb(88, 88, 88);
+  cursor: pointer;
+  user-select: none;
+  font-size: 1rem;
+}
+
+.span-policy {
+  color: rgba(88, 88, 88, 0.5);
+  user-select: none;
+  font-size: 1rem;
+  padding-top: 30px;
+  cursor: pointer;
+}
