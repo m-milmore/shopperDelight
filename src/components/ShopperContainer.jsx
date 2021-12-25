@@ -29,9 +29,8 @@ class ShopperContainer extends React.Component {
   }
 
   handleAddItemsToCart = (id) => (e) => {
-    if (this.state.itemsToCart.length < 99) {
+    this.state.itemsToCart.length < 99 &&
       this.setState({ itemsToCart: [...this.state.itemsToCart, id] });
-    }
     e.target.disabled = true;
   };
 

@@ -1,7 +1,11 @@
 import React from "react";
-import LoginModal from "./LoginModal";
+import LoginSignupScreen from "./LoginSignupScreen/LoginSignupScreen";
 
 const Navbar = ({ itemsToCart }) => {
+  const handleUsername = (username) => {
+    console.log(username);
+  };
+
   return (
     <nav className="navbar navbar-expand-md navbar-light">
       <div className="d-flex container-xxl">
@@ -12,7 +16,7 @@ const Navbar = ({ itemsToCart }) => {
           </span>
         </a>
 
-        <LoginModal />
+        <LoginSignupScreen handleUsername={handleUsername} />
 
         {/* Cart icon */}
         <a className="navbar-brand position-relative" href="#!">

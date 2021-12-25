@@ -7,10 +7,10 @@ import Facebook from "./Facebook";
 
 const INIT_STATE = {
   accessType: "signIn",
-  emailInput: "",
+  emailInput: "q@q.com",
   emailLabel: "E-Mail",
   emailError: "",
-  passwordInput: "",
+  passwordInput: "qqqqqQ@2",
   passwordLabel: "Password",
   passwordError: "",
   passwordType: "password",
@@ -37,8 +37,22 @@ class LoginSignupScreen extends React.Component {
     this.state = INIT_STATE;
   }
 
+  // for x, Close, will close the modal
   handleCloseButton = () => {
     this.setState(INIT_STATE);
+  };
+
+  // for Save/Signin button & Facebook, will close the modal
+  passUsername = (username) => {
+    const btnCloseModal = document.getElementById("btn-close-modal");
+    this.setState(INIT_STATE);
+    this.props.handleUsername(username);
+    btnCloseModal.click();
+  };
+
+  // for clicking outside the modal, will close the modal where as clicking inside the modal will not
+  handleModal = (e) => {
+    e.target.id === "reg-modal" && this.setState(INIT_STATE);
   };
 
   initSignIn = () => {
@@ -149,19 +163,6 @@ class LoginSignupScreen extends React.Component {
     return true;
   };
 
-  gotoCartScreen = (username) => {
-    const { handleUsername } = this.props;
-    this.setState({
-      errorMessage: false,
-      passwordMessage: false,
-      passwordType: "password",
-      eyeIcon: EYE_ICONS["SHOW"],
-      confirmPasswordType: "password",
-      confirmEyeIcon: EYE_ICONS["SHOW"],
-    });
-    handleUsername(username, this.state.emailInput);
-  };
-
   handleSubmit = (e) => {
     e.preventDefault();
     this.setState({
@@ -250,7 +251,7 @@ class LoginSignupScreen extends React.Component {
           errorMessage: true,
         });
       } else {
-        this.gotoCartScreen(
+        this.passUsername(
           `${this.state.firstNameInput} ${this.state.lastNameInput}`
         );
       }
@@ -259,7 +260,7 @@ class LoginSignupScreen extends React.Component {
 
   handleFbUsername = (username) => {
     this.setState({ fbUser: username });
-    this.gotoCartScreen(this.state.fbUser);
+    this.passUsername(this.state.fbUser);
   };
 
   render(props) {
@@ -289,156 +290,177 @@ class LoginSignupScreen extends React.Component {
     } = this.state;
 
     return (
-      <div
-        className={`login-signup-container modal fade`}
-        id="reg-modal"
-        tabIndex="-1"
-        aria-labelledby="modal-title"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-                onClick={this.handleCloseButton}
-              ></button>
-            </div>
-            <div className="modal-body">
-              <form onSubmit={this.handleSubmit}>
-                <button disabled style={{ display: "none" }}></button>
-                <RadioButtons
-                  accessType={accessType}
-                  handleRadioChange={this.handleRadioChange}
-                />
-                <span className="error-message">
-                  {errorMessage ? (
+      <>
+        {/* Navbar Login/Signup button */}
+        <button
+          className="btn btn-primary me-4"
+          data-bs-toggle="modal"
+          data-bs-target="#reg-modal"
+        >
+          Login/Signup
+        </button>
+
+        {/* modal itself */}
+        <div
+          className="modal fade"
+          id="reg-modal"
+          tabIndex="-1"
+          aria-labelledby="modal-title"
+          aria-hidden="true"
+          onClick={this.handleModal}
+        >
+          <div className="modal-dialog" id="dialog">
+            <div className="modal-content" id="content">
+              <div className="modal-body" id="body">
+                <div className="close-button-container">
+                  <span
+                    id="btn-close-modal"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                    onClick={this.handleCloseButton}
+                  >
+                    &#x2716;
+                  </span>
+                </div>
+                <form onSubmit={this.handleSubmit} id="form">
+                  <button disabled style={{ display: "none" }}></button>
+                  <RadioButtons
+                    accessType={accessType}
+                    handleRadioChange={this.handleRadioChange}
+                  />
+                  <span className="error-message">
+                    {errorMessage ? (
+                      <>
+                        We're sorry, but one or more fields are incomplete or
+                        incorrect.
+                        <br />
+                        <u>Find Error(s)</u>.
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </span>
+                  <InputBase
+                    label={emailLabel}
+                    error={emailError}
+                    type="email"
+                    value={emailInput}
+                    name="emailInput"
+                    onChange={this.handleStateChange}
+                    onFocus={() => {
+                      this.setState({ emailError: "" });
+                    }}
+                    minLength="5"
+                    maxLength="20"
+                  />
+                  <InputBase
+                    label={passwordLabel}
+                    error={passwordError}
+                    type={passwordType}
+                    value={passwordInput}
+                    name="passwordInput"
+                    onChange={this.handleStateChange}
+                    onFocus={() => {
+                      this.setState({ passwordError: "" });
+                    }}
+                    minLength="8"
+                    maxLength="20"
+                    typeIs="password"
+                    eyeIcon={eyeIcon}
+                    handleEyeIcon={() => this.handleEyeIcon("password")}
+                  />
+                  <span className="password-message">
+                    {accessType === "signUp" || passwordMessage
+                      ? PASSWORD_RULES
+                      : ""}
+                  </span>
+                  {accessType === "signUp" && (
                     <>
-                      We're sorry, but one or more fields are incomplete or
-                      incorrect.
-                      <br />
-                      <u>Find Error(s)</u>.
+                      <InputBase
+                        label="Confirm Password *"
+                        error={confirmPasswordError}
+                        type={confirmPasswordType}
+                        value={confirmPasswordInput}
+                        name="confirmPasswordInput"
+                        onChange={this.handleStateChange}
+                        onFocus={() => {
+                          this.setState({ confirmPasswordError: "" });
+                        }}
+                        minLength="8"
+                        maxLength="20"
+                        typeIs="password"
+                        eyeIcon={confirmEyeIcon}
+                        handleEyeIcon={this.handleEyeIcon}
+                      />
+                      <InputBase
+                        label="First Name *"
+                        error={firstNameError}
+                        type="text"
+                        value={firstNameInput}
+                        name="firstNameInput"
+                        onChange={this.handleStateChange}
+                        onFocus={() => {
+                          this.setState({ firstNameError: "" });
+                        }}
+                        minLength="2"
+                        maxLength="20"
+                      />
+                      <InputBase
+                        label="Surname *"
+                        error={lastNameError}
+                        type="text"
+                        value={lastNameInput}
+                        name="lastNameInput"
+                        onChange={this.handleStateChange}
+                        onFocus={() => {
+                          this.setState({ lastNameError: "" });
+                        }}
+                        minLength="2"
+                        maxLength="20"
+                      />
+                      <InputBase
+                        label="Postcode"
+                        error={postalCodeError}
+                        type="number"
+                        value={postalCodeInput}
+                        name="postalCodeInput"
+                        onChange={this.handleStateChange}
+                        onFocus={() => {
+                          this.setState({ postalCodeError: "" });
+                        }}
+                        min={10000}
+                        max={99999}
+                      />
                     </>
-                  ) : (
-                    ""
                   )}
+                  <button className="submit-button">{submitButton}</button>
+                </form>
+                <div className="hr-container">
+                  <hr />
+                  <span>or</span>
+                  <hr />
+                </div>
+                <Facebook handleFbUsername={this.handleFbUsername} />
+                <div>
+                  <span
+                    className="span-cancel"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                    onClick={this.handleCloseButton}
+                  >
+                    Cancel
+                  </span>
+                </div>
+                <span className="span-policy">
+                  <u>Privacy Policy and Cookies</u>
+                  &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                  <u>Terms of Sale and Use</u>
                 </span>
-                <InputBase
-                  label={emailLabel}
-                  error={emailError}
-                  type="email"
-                  value={emailInput}
-                  name="emailInput"
-                  onChange={this.handleStateChange}
-                  onFocus={() => {
-                    this.setState({ emailError: "" });
-                  }}
-                  minLength="5"
-                  maxLength="20"
-                />
-                <InputBase
-                  label={passwordLabel}
-                  error={passwordError}
-                  type={passwordType}
-                  value={passwordInput}
-                  name="passwordInput"
-                  onChange={this.handleStateChange}
-                  onFocus={() => {
-                    this.setState({ passwordError: "" });
-                  }}
-                  minLength="8"
-                  maxLength="20"
-                  typeIs="password"
-                  eyeIcon={eyeIcon}
-                  handleEyeIcon={() => this.handleEyeIcon("password")}
-                />
-                <span className="password-message">
-                  {accessType === "signUp" || passwordMessage
-                    ? PASSWORD_RULES
-                    : ""}
-                </span>
-                {accessType === "signUp" && (
-                  <>
-                    <InputBase
-                      label="Confirm Password *"
-                      error={confirmPasswordError}
-                      type={confirmPasswordType}
-                      value={confirmPasswordInput}
-                      name="confirmPasswordInput"
-                      onChange={this.handleStateChange}
-                      onFocus={() => {
-                        this.setState({ confirmPasswordError: "" });
-                      }}
-                      minLength="8"
-                      maxLength="20"
-                      typeIs="password"
-                      eyeIcon={confirmEyeIcon}
-                      handleEyeIcon={this.handleEyeIcon}
-                    />
-                    <InputBase
-                      label="First Name *"
-                      error={firstNameError}
-                      type="text"
-                      value={firstNameInput}
-                      name="firstNameInput"
-                      onChange={this.handleStateChange}
-                      onFocus={() => {
-                        this.setState({ firstNameError: "" });
-                      }}
-                      minLength="2"
-                      maxLength="20"
-                    />
-                    <InputBase
-                      label="Surname *"
-                      error={lastNameError}
-                      type="text"
-                      value={lastNameInput}
-                      name="lastNameInput"
-                      onChange={this.handleStateChange}
-                      onFocus={() => {
-                        this.setState({ lastNameError: "" });
-                      }}
-                      minLength="2"
-                      maxLength="20"
-                    />
-                    <InputBase
-                      label="Postcode"
-                      error={postalCodeError}
-                      type="number"
-                      value={postalCodeInput}
-                      name="postalCodeInput"
-                      onChange={this.handleStateChange}
-                      onFocus={() => {
-                        this.setState({ postalCodeError: "" });
-                      }}
-                      min={10000}
-                      max={99999}
-                    />
-                  </>
-                )}
-                <button className="submit-button">{submitButton}</button>
-              </form>
-              <div className="hr-container">
-                <hr />
-                <span>or</span>
-                <hr />
               </div>
-              <Facebook handleFbUsername={this.handleFbUsername} />
-              <span className="span-cancel" onClick={this.handleCloseButton}>
-                Cancel
-              </span>
-              <span className="span-policy">
-                <u>Privacy Policy and Cookies</u>
-                &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                <u>Terms of Sale and Use</u>
-              </span>
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }
