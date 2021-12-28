@@ -2,9 +2,9 @@ import React from "react";
 import ShopperService from "../services";
 import Navbar from "./Navbar";
 import ProductCard from "../components/ProductCard";
+import orderBy from "lodash.orderby";
 
 const shopper = new ShopperService();
-
 class ShopperContainer extends React.Component {
   state = {
     data: [],
@@ -28,10 +28,40 @@ class ShopperContainer extends React.Component {
     );
   }
 
-  handleAddItemsToCart = (id) => (e) => {
+  handleAddItemsToCart = (id) => {
     this.state.itemsToCart.length < 99 &&
-      this.setState({ itemsToCart: [...this.state.itemsToCart, id] });
-    e.target.disabled = true;
+      this.setState({
+        itemsToCart: [...this.state.itemsToCart, { id, quantity: 1 }],
+      });
+  };
+
+  handleChangeQuantity = (id, num) => {
+    if (
+      this.state.itemsToCart.length === 0 ||
+      !this.state.itemsToCart.some((item) => item.id === id)
+    ) {
+      this.handleAddItemsToCart(id);
+    } else {
+      this.setState({
+        itemsToCart: this.state.itemsToCart.flatMap((item) =>
+          item.id === id
+            ? num > 0
+              ? item.quantity < 10
+                ? [{ ...item, quantity: item.quantity + 1 }]
+                : [item]
+              : item.quantity > 1
+              ? [{ ...item, quantity: item.quantity - 1 }]
+              : []
+            : [item]
+        ),
+      });
+    }
+  };
+
+  handleSortByCategories = () => {
+    this.setState({
+      data: orderBy(this.state.data, ["category", "title"], ["asc", "asc"]),
+    });
   };
 
   render() {
@@ -39,7 +69,10 @@ class ShopperContainer extends React.Component {
 
     return (
       <div className="container">
-        <Navbar itemsToCart={itemsToCart} />
+        <Navbar
+          itemsToCart={itemsToCart}
+          handleSortByCategories={this.handleSortByCategories}
+        />
         <h1 className="mb-5">Shopper's Delight</h1>
         <div className="row justify-content-center">
           {!loading ? (
@@ -49,6 +82,7 @@ class ShopperContainer extends React.Component {
                 key={product.id}
                 handleAddItemsToCart={this.handleAddItemsToCart}
                 itemsToCart={itemsToCart}
+                handleChangeQuantity={this.handleChangeQuantity}
               />
             ))
           ) : (

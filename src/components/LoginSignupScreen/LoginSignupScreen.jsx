@@ -28,7 +28,8 @@ const INIT_STATE = {
   errorMessage: false,
   passwordMessage: false,
   submitButton: "SIGN IN",
-  fbuser: "",
+  fbUser: "",
+  isLogged: "",
 };
 
 class LoginSignupScreen extends React.Component {
@@ -39,14 +40,12 @@ class LoginSignupScreen extends React.Component {
 
   // for x, Close, will close the modal
   handleCloseButton = () => {
-    this.setState(INIT_STATE);
+    this.state.isLogged === "" && this.setState(INIT_STATE);
   };
 
   // for Save/Signin button & Facebook, will close the modal
-  passUsername = (username) => {
+  passUsername = () => {
     const btnCloseModal = document.getElementById("btn-close-modal");
-    this.setState(INIT_STATE);
-    this.props.handleUsername(username);
     btnCloseModal.click();
   };
 
@@ -251,16 +250,22 @@ class LoginSignupScreen extends React.Component {
           errorMessage: true,
         });
       } else {
-        this.passUsername(
-          `${this.state.firstNameInput} ${this.state.lastNameInput}`
-        );
+        this.setState({
+          isLogged: `${this.state.firstNameInput} ${this.state.lastNameInput}`,
+        });
+        this.passUsername();
       }
     }, 50);
   };
 
   handleFbUsername = (username) => {
-    this.setState({ fbUser: username });
-    this.passUsername(this.state.fbUser);
+    this.setState({ fbUser: username, isLogged: username }, () =>
+      this.passUsername()
+    );
+  };
+
+  handleLogout = () => {
+    this.setState(INIT_STATE);
   };
 
   render(props) {
@@ -287,18 +292,43 @@ class LoginSignupScreen extends React.Component {
       postalCodeInput,
       postalCodeError,
       submitButton,
+      isLogged,
     } = this.state;
 
     return (
       <>
         {/* Navbar Login/Signup button */}
-        <button
-          className="btn btn-primary me-4"
-          data-bs-toggle="modal"
-          data-bs-target="#reg-modal"
-        >
-          Login/Signup
-        </button>
+        {isLogged ? (
+          <div className="dropdown">
+            <button
+              className="btn btn-success dropdown-toggle"
+              id="login-dropdown"
+              type="button"
+              data-bs-toggle="dropdown"
+            >
+              <i className="bi bi-person-fill"></i>Hello, {isLogged}
+            </button>
+            <ul className="dropdown-menu" aria-labelledby="book-dropdown">
+              <li>
+                <a
+                  href="#!"
+                  className="dropdown-item bg-light"
+                  onClick={this.handleLogout}
+                >
+                  Log out
+                </a>
+              </li>
+            </ul>
+          </div>
+        ) : (
+          <button
+            className="btn btn-primary me-4"
+            data-bs-toggle="modal"
+            data-bs-target="#reg-modal"
+          >
+            Login/Signup
+          </button>
+        )}
 
         {/* modal itself */}
         <div
