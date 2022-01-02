@@ -4,17 +4,13 @@ class ShopperService {
   async fetchShopperProducts() {
     return new Promise(async (success, failure) => {
       try {
-        const response = await fetch(
-          `${SHOPPER_URL}`,
-          {
-            method: "GET",
-            headers: {
-              "X-Authorization":
-                `${SHOPPER_API}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch(`${SHOPPER_URL}`, {
+          method: "GET",
+          headers: {
+            "X-Authorization": `${SHOPPER_API}`,
+            "Content-Type": "application/json",
+          },
+        });
         if (response.ok) {
           const json = await response.json();
           const data = json.data.map((product) => ({

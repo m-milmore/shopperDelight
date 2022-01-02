@@ -21,7 +21,7 @@ const ProductCard = ({
           <img src={image} className="card-img-top" alt={title} />
           <h5
             className="card-title my-2 bg-light"
-            style={{ minHeight: "35px" }}
+            style={{ minHeight: "3rem" }}
           >
             {title}
           </h5>

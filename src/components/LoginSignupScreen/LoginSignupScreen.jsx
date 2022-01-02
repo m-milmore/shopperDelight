@@ -4,6 +4,7 @@ import { PASSWORD_RULES, EYE_ICONS, accounts } from "../../constants";
 import RadioButtons from "./RadioButtons";
 import InputBase from "./InputBase";
 import Facebook from "./Facebook";
+import "bootstrap/dist/js/bootstrap.bundle";
 
 const INIT_STATE = {
   accessType: "signIn",
@@ -302,13 +303,17 @@ class LoginSignupScreen extends React.Component {
           <div className="dropdown">
             <button
               className="btn btn-success dropdown-toggle"
-              id="login-dropdown"
+              id="logout-dropdown"
               type="button"
               data-bs-toggle="dropdown"
             >
-              <i className="bi bi-person-fill"></i>Hello, {isLogged}
+              <i className="bi bi-person-fill"></i>&nbsp;Hello, {isLogged}
             </button>
-            <ul className="dropdown-menu" aria-labelledby="book-dropdown">
+            <ul
+              className="dropdown-menu"
+              aria-labelledby="logout-dropdown"
+              style={{ width: "100%" }}
+            >
               <li>
                 <a
                   href="#!"

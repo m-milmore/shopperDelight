@@ -1,7 +1,7 @@
 import React from "react";
 import ShopperService from "../services";
 import Navbar from "./Navbar";
-import ProductCard from "../components/ProductCard";
+import ProductCard from "./ProductCard";
 import orderBy from "lodash.orderby";
 
 const shopper = new ShopperService();
@@ -72,6 +72,7 @@ class ShopperContainer extends React.Component {
         <Navbar
           itemsToCart={itemsToCart}
           handleSortByCategories={this.handleSortByCategories}
+          data={data}
         />
         <h1 className="mb-5">Shopper's Delight</h1>
         <div className="row justify-content-center">
@@ -89,7 +90,15 @@ class ShopperContainer extends React.Component {
             <div>Loading...</div>
           )}
         </div>
-        {error && <h3 className="text-danger">"Error loading data...😐"</h3>}
+        {error && (
+          <h3 className="text-danger">
+            "Error loading data...
+            <span role="img" aria-label="smiley">
+              😐
+            </span>
+            "
+          </h3>
+        )}
       </div>
     );
   }

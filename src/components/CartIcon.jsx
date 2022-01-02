@@ -1,8 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const CartIcon = ({ itemsToCart }) => {
   return (
-    <a className="navbar-brand position-relative" href="#!">
+    <Link
+      className="navbar-brand position-relative"
+      to={itemsToCart.length === 0 ? "" : "/checkout"}
+    >
       <span
         className={`navbar-brand position-absolute ${
           itemsToCart.length < 99 ? "text-warning" : "text-danger"
@@ -16,7 +20,7 @@ const CartIcon = ({ itemsToCart }) => {
           cart full
         </h6>
       )}
-    </a>
+    </Link>
   );
 };
 
