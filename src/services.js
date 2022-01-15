@@ -1,6 +1,11 @@
-import { SHOPPER_URL, SHOPPER_API } from "./constants";
+import {
+  SHOPPER_URL,
+  SHOPPER_API,
+  SHOPPER_URL_TAX,
+  SHOPPER_API_TAX,
+} from "./constants";
 
-class ShopperService {
+export class ShopperService {
   async fetchShopperProducts() {
     return new Promise(async (success, failure) => {
       try {
@@ -32,5 +37,32 @@ class ShopperService {
     });
   }
 }
-
-export default ShopperService;
+export class ShopperTax {
+  async fetchShopperTax() {
+    return new Promise(async (success, failure) => {
+      try {
+        const response = await fetch(`${SHOPPER_URL_TAX}`, {
+          method: "GET",
+          headers: {
+            "X-Authorization": `${SHOPPER_API_TAX}`,
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.ok) {
+          const json = await response.json();
+          const data = {
+            gst: parseFloat(json.data[0].country_standard_rate),
+            pst: json.data[0].rates.filter(
+              (rate) => rate.region_code === "QC"
+            )[0].standard_rate,
+          };
+          success({ response, data });
+        } else {
+          failure({ error: "Http Request Error" });
+        }
+      } catch (error) {
+        failure(error);
+      }
+    });
+  }
+}

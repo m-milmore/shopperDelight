@@ -1,6 +1,6 @@
 import React from "react";
 import "./LoginSignupScreen.css";
-import { PASSWORD_RULES, EYE_ICONS, accounts } from "../../constants";
+import { PASSWORD_RULES, EYE_ICONS, accounts } from "../../../constants";
 import RadioButtons from "./RadioButtons";
 import InputBase from "./InputBase";
 import Facebook from "./Facebook";
@@ -20,7 +20,7 @@ const INIT_STATE = {
   confirmPasswordError: "",
   confirmPasswordType: "password",
   confirmEyeIcon: EYE_ICONS["SHOW"],
-  firstNameInput: "Jim",
+  firstNameInput: "Jonathan",
   firstNameError: "",
   lastNameInput: "Jackson",
   lastNameError: "",
@@ -307,7 +307,7 @@ class LoginSignupScreen extends React.Component {
               type="button"
               data-bs-toggle="dropdown"
             >
-              <i className="bi bi-person-fill"></i>&nbsp;Hello, {isLogged}
+              <i className="bi bi-person-fill"></i>&nbsp;Hello, {isLogged.split(" ")[0]}
             </button>
             <ul
               className="dropdown-menu"
@@ -327,7 +327,7 @@ class LoginSignupScreen extends React.Component {
           </div>
         ) : (
           <button
-            className="btn btn-primary me-4"
+            className="btn btn-primary"
             data-bs-toggle="modal"
             data-bs-target="#reg-modal"
           >

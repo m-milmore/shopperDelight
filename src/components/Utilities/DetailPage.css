@@ -1,0 +1,15 @@
+.quantity-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.card-body .para-left {
+  white-space: break-spaces;
+  text-align: left;
+}
+
+.fade.modal-backdrop.show {
+  opacity: 0.25;
+}

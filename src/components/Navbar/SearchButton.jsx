@@ -1,8 +1,9 @@
 import React from "react";
 import "./SearchButton.css";
+import DetailPage from "../Utilities/DetailPage";
 import { Modal } from "bootstrap";
 
-const SearchButton = ({ data }) => {
+const SearchButton = ({ data, itemsToCart, handleChangeQuantity }) => {
   const products = data.map((product) => ({
     title: product.title,
     id: product.id,
@@ -38,11 +39,8 @@ const SearchButton = ({ data }) => {
   };
 
   return (
-    <div
-      className="navbar-brand d-lg-flex flex-row align-items-baseline p-0 m-0 pe-2 d-none me-2"
-      style={{ width: "100%" }}
-    >
-      <div className="d-flex flex-column">
+    <div className="d-flex align-items-baseline">
+      <div className="d-flex flex-column position-relative">
         <div className="input-group">
           <input
             className="form-control search-style my-0"
@@ -63,7 +61,12 @@ const SearchButton = ({ data }) => {
         {suggestions.length > 0 && (
           <div
             className="list-group list-group-flush border rounded corners"
-            style={{ position: "absolute", zIndex: "1000", width: "46%", top: "66px" }}
+            style={{
+              position: "absolute",
+              zIndex: "1000",
+              width: "100%",
+              top: "2.39rem",
+            }}
           >
             {suggestions.map((suggestion, i) => (
               <button
@@ -77,6 +80,14 @@ const SearchButton = ({ data }) => {
           </div>
         )}
       </div>
+      {data.map((product) => (
+        <DetailPage
+          key={product.id}
+          product={product}
+          itemsToCart={itemsToCart}
+          handleChangeQuantity={handleChangeQuantity}
+        />
+      ))}
     </div>
   );
 };

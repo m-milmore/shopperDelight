@@ -1,5 +1,4 @@
 import React from "react";
-import DetailPage from "./DetailPage";
 
 const ProductCard = ({
   product,
@@ -7,7 +6,7 @@ const ProductCard = ({
   itemsToCart,
   handleChangeQuantity,
 }) => {
-  const { title, price, image, id } = product;
+  const { title, price, image, id, quantity } = product;
 
   return (
     <div className="col-6 col-sm-4 col-md-3 col-lg-2">
@@ -20,18 +19,20 @@ const ProductCard = ({
         >
           <img src={image} className="card-img-top" alt={title} />
           <h5
-            className="card-title my-2 bg-light"
+            className="card-title m-0 p-0 bg-light d-flex flex-column align-items-center justify-content-center"
             style={{ minHeight: "3rem" }}
           >
             {title}
           </h5>
-          <p className="card-text mb-2">{price}</p>
+          <p className="card-text m-0 p-0 mt-2">{price}</p>
+          <h6 className="h6 m-0 p-0">qty in stock: {quantity}</h6>
         </div>
         <button
           type="button"
           disabled={
             itemsToCart.length === 99 ||
-            itemsToCart.some((item) => item.id === id)
+            itemsToCart.some((item) => item.id === id) ||
+            quantity < 0
           }
           className="btn btn-sm text-white rounded-pill btn-info px-5 px-lg-4 px-xl-5 text-nowrap"
           onClick={() => handleAddItemsToCart(id)}
@@ -39,11 +40,6 @@ const ProductCard = ({
           Add to Cart
         </button>
       </div>
-      <DetailPage
-        product={product}
-        itemsToCart={itemsToCart}
-        handleChangeQuantity={handleChangeQuantity}
-      />
     </div>
   );
 };
