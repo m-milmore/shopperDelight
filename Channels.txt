@@ -1,0 +1,10 @@
+[
+	{
+		"description": "My first channel",
+		"name": "Channel A",
+	},
+	{
+		"description": "My second channel",
+		"name": "Channel B",
+	},
+]

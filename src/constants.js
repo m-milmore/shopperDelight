@@ -1,24 +1,32 @@
-import EYE_ICON from "./assets/eye-icon.png";
-import EYE_ICON_HIDE from "./assets/eye-icon-hide.png";
+export const AVATARS = [
+  "dark0.png",
+  "dark1.png",
+  "dark2.png",
+  "dark3.png",
+  "dark4.png",
+  "dark5.png",
+  "dark6.png",
+  "dark7.png",
+  "dark8.png",
+  "dark9.png",
+  "dark10.png",
+  "dark11.png",
+  "dark12.png",
+  "dark13.png",
+  "dark14.png",
+  "dark15.png",
+  "dark16.png",
+  "dark17.png",
+  "dark18.png",
+  "dark19.png",
+  "dark20.png",
+  "dark21.png",
+  "dark22.png",
+  "dark23.png",
+  "dark24.png",
+  "dark25.png",
+  "dark26.png",
+  "dark27.png",
+];
 
-export const SHOPPER_URL = "https://api.chec.io/v1/products?limit=200";
-export const SHOPPER_URL_TAX = "https://api.chec.io/v1/tax/zones";
-export const SHOPPER_API = process.env.REACT_APP_SHOPPER_API;
-export const SHOPPER_API_TAX = process.env.REACT_APP_SHOPPER_API_TAX;
-
-export const EYE_ICONS = {
-  SHOW: EYE_ICON,
-  HIDE: EYE_ICON_HIDE,
-};
-
-export const PASSWORD_RULES = `
-Password must be 8-20 characters, including at least one capital letter, at least one small letter,
-one number and one special character -!@#$%^&*()_+
-`;
-
-export const accounts = ["a@a.com", "b@b.com", "c@c.com"];
-
-export const formatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-});
+export const AVATAR_COUNT = 28;
