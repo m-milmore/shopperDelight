@@ -1,14 +1,15 @@
 import React, { useState, createContext, useContext } from "react";
+import "./App.css";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Redirect,
 } from "react-router-dom";
-import "./App.css";
 import ChatApp from "./components/ChatApp/ChatApp";
 import UserLogin from "./components/UserLogin/UserLogin";
 import UserCreate from "./components/UserCreate/UserCreate";
+import UserRemoved from "./components/UserRemoved/UserRemoved";
 import { AuthService, ChatService, SocketService } from "./services";
 
 const authService = new AuthService();
@@ -38,6 +39,7 @@ const AuthProvider = ({ children }) => {
 
 const PrivateRoute = ({ children, ...props }) => {
   const context = useContext(UserContext);
+
   return (
     <Route
       {...props}
@@ -59,6 +61,7 @@ const App = () => {
         <Switch>
           <Route path="/login" exact component={UserLogin} />
           <Route path="/register" exact component={UserCreate} />
+          <Route path="/userremoved" component={UserRemoved} />
           <PrivateRoute>
             <ChatApp />
           </PrivateRoute>

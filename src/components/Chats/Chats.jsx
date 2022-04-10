@@ -1,7 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../../App";
-import UserAvatar from "../UserAvatar/UserAvatar";
 import "./Chats.css";
+import UserAvatar from "../UserAvatar/UserAvatar";
+import DeleteModal from "../DeleteModal/DeleteModal";
 import { formatDate } from "../../helpers/dateFormat";
 
 const Chats = ({ chats }) => {
@@ -11,21 +12,29 @@ const Chats = ({ chats }) => {
     chatService,
     socketService,
   } = useContext(UserContext);
+
   const [messages, setMessages] = useState([]);
   const [messageBody, setMessageBody] = useState("");
   const [typingMessage, setTypingMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [messageId, setMessageId] = useState("");
+  const [editingMsg, setEditingMsg] = useState("");
+  const [pencilClick, setPencilClick] = useState(false);
 
   useEffect(() => {
     setMessages(chats);
   }, [chats]);
 
   useEffect(() => {
-    if (appSelectedChannel.id) {
+    if (!!appSelectedChannel.id) {
       chatService
         .findAllMessagesForChannel(appSelectedChannel.id)
         .then((res) => setMessages(res));
+    } else {
+      setMessages([]);
     }
+    setMessageId("");
   }, [appSelectedChannel]);
 
   useEffect(() => {
@@ -73,16 +82,82 @@ const Chats = ({ chats }) => {
     setMessageBody("");
   };
 
+  const editMessage = (msgId, msgBody) => {
+    setMessageId(msgId);
+    setEditingMsg(msgBody);
+    setPencilClick(true);
+  };
+
+  const updateMessage = () => {
+    chatService
+      .updateMessage(
+        messageId,
+        editingMsg,
+        authService.id,
+        appSelectedChannel.id,
+        authService.name,
+        authService.avatarName,
+        authService.avatarColor
+      )
+      .catch((error) => {
+        console.error("error updating message", error);
+      });
+    setMessages(
+      messages.map((msg) =>
+        msg.id === messageId ? { ...msg, messageBody: editingMsg } : msg
+      )
+    );
+    setMessageId("");
+    setEditingMsg("");
+    setPencilClick(false);
+  };
+
+  const cancelEditMessage = () => {
+    setMessageId("");
+    setEditingMsg("");
+    setPencilClick(false);
+  };
+
+  const openDeleteConf = (msgId, msgBody) => {
+    setMessageId(msgId);
+    setEditingMsg(msgBody);
+    setDeleteModal(true);
+  };
+
+  const closeDeleteConf = () => {
+    setMessageId("");
+    setEditingMsg("");
+    setDeleteModal(false);
+  };
+
+  const deleteMessage = () => {
+    chatService.deleteMessage(messageId).catch((error) => {
+      console.error("error deleting message", error);
+    });
+    setMessages((messages) => messages.filter((msg) => msg.id !== messageId));
+    setMessageId("");
+    setEditingMsg("");
+    setDeleteModal(false);
+  };
+
   return (
     <div className="chat">
       <div className="chat-header">
-        <h3>#{appSelectedChannel.name} - </h3>
-        <h4>{appSelectedChannel.description}</h4>
+        {!!appSelectedChannel && (
+          <>
+            <h3>#{appSelectedChannel.name} -&nbsp;</h3>
+            <h4>{appSelectedChannel.description}</h4>
+          </>
+        )}
       </div>
       <div className="chat-list">
         {!!messages.length ? (
           messages.map((msg) => (
-            <div key={msg.id} className="chat-message">
+            <div
+              key={msg.id}
+              className={`chat-message ${authService.id === msg.userId &&
+                "by-user"}`}
+            >
               <UserAvatar
                 avatar={{
                   avatarName: msg.userAvatar,
@@ -93,8 +168,45 @@ const Chats = ({ chats }) => {
               <div className="chat-user">
                 <strong>{msg.userName}</strong>
                 <small>{formatDate(msg.timeStamp)}</small>
-                <div className="message-body">{msg.messageBody}</div>
+                {msg.id === messageId ? (
+                  <textarea
+                    rows="1"
+                    cols="75"
+                    className="message-edit"
+                    defaultValue={editingMsg}
+                    onChange={(e) => setEditingMsg(e.target.value)}
+                  />
+                ) : (
+                  <div className="message-body">{msg.messageBody}</div>
+                )}
               </div>
+              {authService.id === msg.userId && (
+                <div className="icons-container">
+                  {pencilClick ? (
+                    <>
+                      <i
+                        onClick={updateMessage}
+                        className="fa-solid fa-message-pen"
+                      ></i>
+                      <i
+                        onClick={cancelEditMessage}
+                        className="fa-solid fa-message-slash"
+                      ></i>
+                    </>
+                  ) : (
+                    <>
+                      <i
+                        onClick={() => openDeleteConf(msg.id, msg.messageBody)}
+                        className="fa-solid fa-trash-can"
+                      ></i>
+                      <i
+                        onClick={() => editMessage(msg.id, msg.messageBody)}
+                        className="fa-solid fa-pencil"
+                      ></i>
+                    </>
+                  )}
+                </div>
+              )}
             </div>
           ))
         ) : (
@@ -105,13 +217,20 @@ const Chats = ({ chats }) => {
         <div className="typing">{typingMessage}</div>
         <div className="chat-wrapper">
           <textarea
-            onChange={onTyping}
             value={messageBody}
             placeholder="type a message..."
+            onChange={onTyping}
           />
-          <input type="submit" className="submit-btn" value="SEND" />
+          <input type="submit" value="Send" className="submit-btn" />
         </div>
       </form>
+      <DeleteModal
+        title="Delete message"
+        isOpen={deleteModal}
+        close={closeDeleteConf}
+        msg="Are you sure you want to delete your message?"
+        deleteFunc={deleteMessage}
+      />
     </div>
   );
 };

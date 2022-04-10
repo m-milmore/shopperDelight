@@ -5,14 +5,15 @@
   padding: 10px;
 }
 
-.form.channel-form {
-  margin: auto;
-  box-shadow: none;
-}
-
 .channel-header {
   border-bottom: 1px solid rgba(200, 187, 200, 0.3);
   text-align: center;
+  color: var(--lunar);
+}
+
+.channel-label {
+  line-height: 2;
+  display: inline;
   color: var(--lunar);
 }
 
@@ -26,15 +27,8 @@
   color: var(--cloudy);
 }
 
-.channel-label {
-  line-height: 2;
-  display: inline;
-  color: var(--lunar);
-  font-size: 1.25rem;
-}
-
-.channel-label.unread {
-  font-weight: bold;
+.channel-list {
+  padding: 20px 0;
 }
 
 .channel-label .inner:hover {
@@ -42,16 +36,37 @@
   cursor: pointer;
 }
 
-.channel-list {
-  padding: 20px 0;
+.inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 5px;
 }
 
-.channel-label .inner.selected {
-  padding: 0 5px;
+.inner.selected {
   border-radius: 5px;
 }
 
-.channel-label .inner.selected,
-.channel-label .inner.selected:hover {
+.inner.selected,
+.inner.selected:hover {
   background: #0f79d7;
 }
+
+.fa-circle-trash {
+  font-size: 0.8rem;
+  margin-right: 5px;
+}
+
+.form.channel-form {
+  margin: auto;
+  box-shadow: none;
+}
+
+.channel-label.unread {
+  font-weight: bold;
+}
+
+/* .channel-label .inner.selected {
+  padding: 0 5px;
+  border-radius: 5px;
+} */

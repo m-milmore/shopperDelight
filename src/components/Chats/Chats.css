@@ -12,13 +12,20 @@
   margin-bottom: 20px;
 }
 
-.chat-header h4 {
-  margin-left: 10px;
-}
-
 .chat-message {
   display: flex;
-  padding-bottom: 15px;
+  align-items: center;
+  padding: 3px 3px 15px 3px;
+}
+
+.chat-message.by-user {
+  background: white;
+  transition: ease-in-out 0.25s;
+}
+
+.chat-message:hover.by-user {
+  border-radius: 5px;
+  background: rgb(247, 247, 247);
 }
 
 .chat-user {
@@ -28,6 +35,38 @@
 .chat-user small {
   color: darkgray;
   padding-left: 10px;
+}
+
+.icons-container {
+  align-self: flex-start;
+  flex: 1;
+}
+
+.chat-message:hover .fa-trash-can,
+.chat-message:hover .fa-pencil,
+.chat-message:hover .fa-message-pen,
+.chat-message:hover .fa-message-slash {
+  opacity: 1;
+}
+
+.fa-trash-can,
+.fa-pencil,
+.fa-message-pen,
+.fa-message-slash {
+  opacity: 0;
+  padding: 5px 3px 0;
+  float: right;
+  margin-right: 8px;
+  color: rgba(0, 0, 0, 0.25);
+  transition: ease-in-out 0.25s;
+}
+
+.fa-trash-can:hover,
+.fa-pencil:hover,
+.fa-message-pen:hover,
+.fa-message-slash:hover {
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .chat-bar {
@@ -40,6 +79,7 @@
 
 .chat-wrapper {
   display: flex;
+  align-items: center;
   padding: 15px 10px;
 }
 
@@ -58,10 +98,35 @@
 .chat-wrapper input[type="submit"] {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
-	width: 100px;
+  width: 100px;
 }
 
 .typing {
-	opacity: 0.5;
-	padding-left: 10px;
+  opacity: 0.5;
+  padding-left: 10px;
 }
+
+.message-edit,
+.message-edit:focus {
+  font-family: "roboto", "Helvetica Neue", Helvetica, Arial, sans-serif; /* make your choice */
+  font-size: 16px; /* make your choice */
+  border: none;
+  border-radius: 5px;
+  background: rgba(247, 247, 247, rgba(0, 0, 0, 0.5));
+  -webkit-appearance: none;
+  -moz-apperarance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  outline: none;
+  padding: 0px;
+  width: 100%;
+  overflow: hidden;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  -ms-box-shadow: none;
+  -o-box-shadow: none;
+  box-shadow: none;
+  resize: none;
+}
+

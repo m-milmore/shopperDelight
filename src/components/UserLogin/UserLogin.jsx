@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
-import "./UserLogin.css";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../App";
+import "./UserLogin.css";
 import Alert from "../Alert/Alert";
 
 const UserLogin = ({ location, history }) => {
@@ -13,10 +13,7 @@ const UserLogin = ({ location, history }) => {
   const [error, setError] = useState(false);
 
   const onChange = ({ target: { name, value } }) => {
-    setUserLogins({
-      ...userLogins,
-      [name]: value,
-    });
+    setUserLogins({ ...userLogins, [name]: value });
   };
 
   const onLoginUser = (e) => {
@@ -29,41 +26,38 @@ const UserLogin = ({ location, history }) => {
         .then(() => history.replace(from))
         .catch(() => {
           setError(true);
-          setUserLogins({
-            email: "",
-            password: "",
-          });
+          setUserLogins({ email: "", password: "" });
         });
     }
   };
 
-  const errMessage = "Sorry, you entered an incorrect email or password";
+  const errMsg = "Sorry you entered an incorrect email or password";
 
   return (
     <div className="center-display">
-      {error ? <Alert message={errMessage} type="alert-danger" /> : null}
-      <form onSubmit={onLoginUser} className="form">
+      {error ? <Alert message={errMsg} type="alert-danger" /> : null}
+      <form className="form" onSubmit={onLoginUser}>
         <label>
           Enter your <strong>email address</strong> and{" "}
-          <strong>password.</strong>
+          <strong>password</strong>
         </label>
         <input
-          onChange={onChange}
           type="email"
           className="form-control"
           name="email"
           placeholder="elonmusk@tesla.com"
           value={userLogins.email}
+          onChange={onChange}
         />
         <input
-          onChange={onChange}
           type="password"
           className="form-control"
           name="password"
           placeholder="password"
           value={userLogins.password}
+          onChange={onChange}
         />
-        <input type="submit" className="submit-btn" value="Sign In" />
+        <input type="submit" className="submit-btn" value="sign in" />
       </form>
       <div className="footer-text">
         No Account? Create one <Link to="/register">HERE</Link>

@@ -1,0 +1,10 @@
+.avatar-text {
+  color: var(--sky-blue);
+  transition: ease-in-out 0.33s;
+  line-height: 1.5;
+}
+
+.avatar-text:hover {
+  color: var(--sky-tint);
+  cursor: pointer;
+}

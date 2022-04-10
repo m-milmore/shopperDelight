@@ -1,0 +1,37 @@
+.edit-input-container {
+  display: flex;
+  align-items: center;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 3px;
+  margin: 5px;
+}
+
+.form-control2 {
+  margin-bottom: 0;
+  padding: 5px;
+  border: none;
+}
+
+.form-control2 {
+	outline: none;
+}
+
+.check-close-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 3px;
+  align-items: space-between;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.fa-circle-check {
+  color: var(--sky-tint);
+  cursor: pointer;
+}
+
+.fa-circle-xmark {
+  color: crimson;
+  cursor: pointer;
+}

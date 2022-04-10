@@ -2,20 +2,21 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./Modal.css";
 
-const Modal = ({ children, title, close, isOpen }) => {
+const Modal = ({ title, children, close, isOpen }) => {
   return (
     <>
       {isOpen ? (
-        <div className="modal-overlay">
+        <div className="modal">
           <div className="modal-dialog">
             <div className="modal-content">
-              <div className="my-modal-header">
+              <div className="modal-header">
                 <h5 className="modal-title">{title}</h5>
                 <button onClick={() => close(false)} className="close">
                   &times;
                 </button>
               </div>
-              <div className="my-modal-body">{children}</div>
+              <hr style={{ width: "90%" }} />
+              <div className="modal-body">{children}</div>
             </div>
           </div>
         </div>

@@ -26,6 +26,10 @@ h5 {
   margin: 0;
 }
 
+div {
+  user-select: none;
+}
+
 .title {
   margin-bottom: 20px;
 }
@@ -54,7 +58,7 @@ h5 {
 }
 
 .submit-btn {
-  border: 1px solid #2eb67d;
+  border: none;
   background: #2eb67d;
   width: 100%;
   border-radius: 5px;
@@ -62,12 +66,21 @@ h5 {
   font-weight: bold;
   text-transform: uppercase;
   font-size: 1.1rem;
-  transition: ease-in-out 0.3s;
+  transition: ease-in-out 0.33s;
   color: white;
+  margin: 0 3px;
 }
 
 .logout-btn {
   background: #b33f40;
+}
+
+.update-btn {
+  background: #21738b;
+}
+
+.delete-btn {
+  background: rgba(139, 32, 187, .75);
 }
 
 .submit-btn:hover {
@@ -78,8 +91,18 @@ h5 {
   background: #973537;
 }
 
+.update-btn:hover {
+  background: #0d4b5e;
+}
+
+.delete-btn:hover {
+  background: rgb(139, 32, 187);
+}
+
 .submit-btn:hover,
-.logout-btn:hover {
+.logout-btn:hover,
+.update-btn:hover,
+.delete-btn:hover {
   cursor: pointer;
 }
 
@@ -115,3 +138,11 @@ input[type="text"].disabled {
   border-color: #f5c6cb;
   border-left: 5px solid #cc0000;
 }
+
+.alert.alert-ok {
+  color: white;
+  background-color: var(--sky-blue);
+  border-color: var(--sky-tint);
+  border-left: 5px solid #0d4b5e;
+}
+

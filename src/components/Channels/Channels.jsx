@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../App";
-import Modal from "../Modal/Modal";
 import "./Channels.css";
+import Modal from "../Modal/Modal";
+import DeleteModal from "../DeleteModal/DeleteModal";
 import { toCamelCase } from "../../helpers/camelCase";
 
 const Channels = ({ unread }) => {
@@ -20,6 +21,12 @@ const Channels = ({ unread }) => {
   const [channels, setChannels] = useState([]);
   const [modal, setModal] = useState(false);
   const [unreadChannels, setUnreadChannels] = useState([]);
+  const [addedNewChannel, setAddedNewChannel] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [channelToDelete, setChannelToDelete] = useState({
+    id: "",
+    name: "",
+  });
 
   useEffect(() => {
     setUnreadChannels(unread);
@@ -27,16 +34,32 @@ const Channels = ({ unread }) => {
 
   useEffect(() => {
     chatService.findAllChannels().then((res) => {
-      setChannels(res);
-      appSetChannel(res[0]);
+      if (!!res.length) {
+        setChannels(res);
+        appSetChannel(res[0]);
+      }
     });
   }, []);
 
   useEffect(() => {
-    socketService.getChannel((channelList) => {
-      setChannels(channelList);
+    socketService.getChannel((channelList, channel) => {
+      setChannels([...channelList]);
+      if (channelList.length === 1) {
+        appSetChannel(channel);
+      }
     });
   }, []);
+
+  useEffect(() => {
+    if (addedNewChannel) {
+      appSetChannel(channels[channels.length - 1]);
+      const unread = chatService.setUnreadChannels(
+        channels[channels.length - 1]
+      );
+      setUnreadChannels(unread);
+      setAddedNewChannel(false);
+    }
+  }, [channels]);
 
   const selectChannel = (channel) => () => {
     appSetChannel(channel);
@@ -52,8 +75,34 @@ const Channels = ({ unread }) => {
     e.preventDefault();
     const camelChannel = toCamelCase(newChannel.name);
     socketService.addChannel(camelChannel, newChannel.description);
+    setAddedNewChannel(true);
     setNewChannel(INIT);
     setModal(false);
+  };
+
+  const openDeleteConf = (id, name) => {
+    setChannelToDelete({ id, name });
+    setDeleteModal(true);
+  };
+
+  const closeDeleteConf = () => {
+    setChannelToDelete({ id: "", name: "" });
+    setDeleteModal(false);
+  };
+
+  const deleteChannel = () => {
+    chatService
+      .deleteChannel(channelToDelete.id) //delete from db
+      .then(() => {
+        setChannels(chatService.removeChannel(channelToDelete.id)); //remove from chatService
+        appSetChannel(chatService.getSelectedChannel());
+        setUnreadChannels(chatService.unreadChannels);
+      })
+      .catch((error) => {
+        console.error("error deleting channel", error);
+      });
+    setChannelToDelete({ id: "", name: "" });
+    setDeleteModal(false);
   };
 
   return (
@@ -80,34 +129,47 @@ const Channels = ({ unread }) => {
                     appSelectedChannel.id === channel.id ? "selected" : ""
                   }`}
                 >
-                  #{channel.name}
+                  # {channel.name}
+                  <i
+                    onClick={() => openDeleteConf(channel.id, channel.name)}
+                    className="fa-solid fa-circle-trash"
+                  ></i>
                 </div>
               </div>
             ))
           ) : (
-            <div>No channels to be found. Please add one.</div>
+            <div style={{ color: "white" }}>No channels.</div>
           )}
         </div>
       </div>
       <Modal title="Create Channel" isOpen={modal} close={setModal}>
         <form className="form channel-form" onSubmit={createChannel}>
           <input
-            onChange={onChange}
             type="text"
             className="form-control"
             name="name"
             placeholder="enter channel name"
+            value={newChannel.name}
+            onChange={onChange}
           />
           <input
-            onChange={onChange}
             type="text"
             className="form-control"
             name="description"
             placeholder="enter channel description"
+            value={newChannel.description}
+            onChange={onChange}
           />
           <input type="submit" className="submit-btn" value="Create Channel" />
         </form>
       </Modal>
+      <DeleteModal
+        title="Delete channel"
+        isOpen={deleteModal}
+        close={closeDeleteConf}
+        msg={`Are you sure you want to delete ${channelToDelete.name} and all its messages?`}
+        deleteFunc={deleteChannel}
+      />
     </>
   );
 };
